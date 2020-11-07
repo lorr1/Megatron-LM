@@ -21,6 +21,7 @@ import sys
 import torch
 from torch.nn.parallel.distributed import DistributedDataParallel as torchDDP
 from apex.optimizers import FusedAdam as Adam
+import wandb
 
 from megatron import get_args
 from megatron import get_timers
@@ -77,6 +78,7 @@ def pretrain(train_valid_test_dataset_provider, model_provider,
     # Model, optimizer, and learning rate.
     timers('model and optimizer').start()
     model, optimizer, lr_scheduler = setup_model_and_optimizer(model_provider)
+    wandb.watch(model)
     timers('model and optimizer').stop()
 
     # Data stuff.
@@ -277,6 +279,7 @@ def train_step(forward_step_func, data_iterator,
     # Forward model for one step.
     timers('forward').start()
     loss, loss_reduced = forward_step_func(data_iterator, model)
+    wandb.log({"loss": loss})
     timers('forward').stop()
 
     # Calculate gradients, reduce across processes, and clip.
