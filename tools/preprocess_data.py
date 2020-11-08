@@ -90,7 +90,7 @@ class Encoder(object):
             ids[key] = doc_ids
         return ids, len(json_line)
 
-def get_args():
+def get_args(argv=None):
     parser = argparse.ArgumentParser()
     group = parser.add_argument_group(title='input data')
     group.add_argument('--input', type=str, required=True,
@@ -126,7 +126,7 @@ def get_args():
                        help='Number of worker processes to launch')
     group.add_argument('--log-interval', type=int, default=100,
                        help='Interval between progress updates')
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     args.keep_empty = False
 
     if args.tokenizer_type.lower().startswith('bert'):
@@ -140,8 +140,8 @@ def get_args():
 
     return args
 
-def main():
-    args = get_args()
+def main(argv):
+    args = get_args(argv)
     startup_start = time.time()
 
     print("Opening", args.input)
