@@ -32,6 +32,7 @@ def parse_args(extra_args_provider=None, defaults={},
     parser = _add_regularization_args(parser)
     parser = _add_training_args(parser)
     parser = _add_initialization_args(parser)
+    parser = _add_wandb_args(parser)
     parser = _add_learning_rate_args(parser)
     parser = _add_checkpointing_args(parser)
     parser = _add_mixed_precision_args(parser)
@@ -267,6 +268,25 @@ def _add_initialization_args(parser):
     return parser
 
 
+def _add_wandb_args(parser):
+    group = parser.add_argument_group(title='wandb')
+
+    group.add_argument('--project', type=str, default="gpt-rep-test",
+                       help='Wandb project to pass to init().')
+    group.add_argument('--entity', type=str, default=None,
+                       help='Wandb entity to pass to init().')
+    group.add_argument('--group', type=str, default="group",
+                       help='Wandb project to pass to init().')
+    group.add_argument('--job_type', type=str, default="training",
+                       help='Wandb job_type to pass to init().')
+    group.add_argument('--name', type=str, default=None,
+                       help='Wandb name to pass to init().')
+    group.add_argument('--tags', nargs='+', default=[],
+                       help='Wandb tags to pass to init().')
+
+    return parser
+
+
 def _add_learning_rate_args(parser):
     group = parser.add_argument_group(title='learning rate')
 
@@ -399,7 +419,7 @@ def _add_data_args(parser):
 
     group.add_argument('--data-path', type=str, default=None,
                        help='Path to combined dataset to split.')
-    group.add_argument('--split', type=str, default='969, 30, 1',
+    group.add_argument('--split', type=str, default='90, 10, 10',
                        help='Comma-separated list of proportions for training,'
                        ' validation, and test split. For example the split '
                        '`90,5,5` will use 90% of data for training, 5% for '

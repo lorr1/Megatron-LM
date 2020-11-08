@@ -27,7 +27,7 @@ from megatron import get_args
 from megatron import get_timers
 from megatron import get_tensorboard_writer
 from megatron import mpu
-from megatron import print_rank_0
+from megatron import print_rank_0, wand_init_0
 from megatron.checkpointing import load_checkpoint
 from megatron.checkpointing import save_checkpoint
 from megatron.fp16 import FP16_Module
@@ -75,10 +75,10 @@ def pretrain(train_valid_test_dataset_provider, model_provider,
     args = get_args()
     timers = get_timers()
 
+    wand_init_0(args)
     # Model, optimizer, and learning rate.
     timers('model and optimizer').start()
     model, optimizer, lr_scheduler = setup_model_and_optimizer(model_provider)
-    wandb.watch(model)
     timers('model and optimizer').stop()
 
     # Data stuff.
@@ -279,7 +279,6 @@ def train_step(forward_step_func, data_iterator,
     # Forward model for one step.
     timers('forward').start()
     loss, loss_reduced = forward_step_func(data_iterator, model)
-    wandb.log({"loss": loss})
     timers('forward').stop()
 
     # Calculate gradients, reduce across processes, and clip.

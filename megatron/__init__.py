@@ -13,7 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import torch
-
+import wandb
+import os
 from .package_info import (
     __description__,
     __contact_names__,
@@ -39,3 +40,15 @@ def print_rank_0(message):
             print(message, flush=True)
     else:
         print(message, flush=True)
+
+def wand_init_0(args):
+    """If distributed is initialized init wandb."""
+    if torch.distributed.is_initialized():
+        if torch.distributed.get_rank() == 0:
+            print(f"Saving wandb to {os.path.join(args.save)}")
+            wandb.init(config=args, name=args.name, project=args.project, entity=args.entity, group=args.group, job_type=args.job_type,
+                       dir=args.save, save_code=True, sync_tensorboard=True)
+    else:
+        print(f"Saving wandb to {os.path.join(args.save)}")
+        wandb.init(config=args, name=args.name, project=args.project, entity=args.entity, group=args.group, job_type=args.job_type,
+                   dir=args.save, save_code=True, sync_tensorboard=True)
