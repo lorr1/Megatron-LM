@@ -1,6 +1,6 @@
 import numpy as np
 import argparse
-from typing import List, str
+from typing import List
 
 
 def generate_abc_dataset(
