@@ -1,0 +1,10 @@
+wandb-project: gpt-rep-test
+megatron_preprocess:
+  --input : ./output_files/abc.jsonl
+  --output-prefix : ./preprocessed-outs/abc
+  --vocab : ./tokenizer_files/gpt2-vocab.json
+  --merge-file : ./tokenizer_files/gpt2-merges.txt
+  --workers: 16
+  --dataset-impl: mmap
+  --json-keys : text
+  --tokenizer-type : GPT2BPETokenizer
