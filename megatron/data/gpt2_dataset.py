@@ -254,6 +254,7 @@ def _build_doc_idx(documents, num_epochs, np_rng):
     doc_idx[:] = documents
     doc_idx = doc_idx.reshape(-1)
     doc_idx = doc_idx.astype(np.int32)
+    print("SHUFFLINGS...")
     np_rng.shuffle(doc_idx)
     return doc_idx
 

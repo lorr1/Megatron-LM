@@ -123,8 +123,20 @@ def get_model(model_provider_func):
     # Build model on cpu.
     model = model_provider_func()
 
+    def count_parameters(model, requires_grad):
+        total_cnt = 0
+        for p in [p for p in model.named_parameters() if p[1].requires_grad is requires_grad]:
+            total_cnt += p[1].numel()*4/1024**2
+            print("{:s} {:d} {:.2f} MB".format(p[0], p[1].numel(), p[1].numel()*4/1024**2))
+        return total_cnt
     # Print number of parameters.
     if mpu.get_data_parallel_rank() == 0:
+        print("*** NUMBER PARAMETERS WITH GRAD")
+        t = count_parameters(model, requires_grad=True)
+        print("TOTAL", t)
+        print("*** NUMBER PARAMETERS WITHOUT GRAD")
+        t = count_parameters(model, requires_grad=False)
+        print("TOTAL", t)
         print(' > number of parameters on model parallel rank {}: {}'.format(
             mpu.get_model_parallel_rank(),
             sum([p.nelement() for p in model.parameters()])), flush=True)
@@ -365,7 +377,7 @@ def training_log(loss_dict, total_loss_dict, learning_rate, iteration,
                                                        args.train_iters)
         log_string += ' elapsed time per iteration (ms): {:.1f} |'.format(
             elapsed_time * 1000.0 / args.log_interval)
-        log_string += ' learning rate: {:.3E} |'.format(learning_rate)
+        log_string += ' learning rate: {:.5E} |'.format(learning_rate)
         num_iterations = max(
             1, args.log_interval - total_loss_dict[skipped_iters_key])
         for key in total_loss_dict:
