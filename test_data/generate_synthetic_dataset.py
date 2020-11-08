@@ -49,8 +49,8 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Synthetic dataset.')
     parser.add_argument('--dataset', type=str, choices=['abc'], help='Name of dataset.', default='abc')
-    parser.add_argument('--num_sequences', type=int, help='Number of sequences to generate.', default=10)
-    parser.add_argument('--seq_length', type=int, help='Length of each sequence being generated.', default=20)
+    parser.add_argument('--num_sequences', type=int, help='Number of sequences to generate.', default=300)
+    parser.add_argument('--seq_length', type=int, help='Length of each sequence being generated.', default=10)
     parser.add_argument('--output_file', type=str, help='Name of output file.', required=True)
 
     args = parser.parse_args()

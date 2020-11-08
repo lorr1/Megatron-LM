@@ -419,7 +419,7 @@ def _add_data_args(parser):
 
     group.add_argument('--data-path', type=str, default=None,
                        help='Path to combined dataset to split.')
-    group.add_argument('--split', type=str, default='90, 10, 10',
+    group.add_argument('--split', type=str, default='90, 5, 5',
                        help='Comma-separated list of proportions for training,'
                        ' validation, and test split. For example the split '
                        '`90,5,5` will use 90% of data for training, 5% for '

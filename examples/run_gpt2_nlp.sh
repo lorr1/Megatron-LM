@@ -2,11 +2,11 @@ CHECKPOINT_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_b
 TENSORBOARD_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_baby/tensorboard
 VOCAB_FILE=/u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-vocab.json
 MERGE_FILE=/u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-merges.txt
-DATA_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/baby-dataset2/my-gpt2_text_document
+DATA_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/baby_dataset/test_abc_text_document
 
 GPT2_ARGS="--num-layers 1 \
            --hidden-size 64 \
-           --num-attention-heads 2 \
+           --num-attention-heads 8 \
            --seq-length 16 \
            --max-position-embeddings 1024 \
            --batch-size 16 \
@@ -37,3 +37,4 @@ python pretrain_gpt2.py \
        --load $CHECKPOINT_PATH \
        --data-path $DATA_PATH \
        --tensorboard-dir $TENSORBOARD_PATH \
+       --split "33, 33, 33"
