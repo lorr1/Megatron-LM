@@ -21,11 +21,21 @@ import os
 import torch
 from megatron import fused_kernels
 
+try:
+    from quinine import QuinineArgumentParser
+    _quinine_available = True
+except ImportError:
+    _quinine_available = False
+
 def parse_args(extra_args_provider=None, defaults={},
                ignore_unknown_args=False):
     """Parse all arguments."""
-    parser = argparse.ArgumentParser(description='Megatron-LM Arguments',
-                                     allow_abbrev=False)
+    if _quinine_available:
+        parser = QuinineArgumentParser(description='Megatron-LM Arguments',
+                                       allow_abbrev=False)
+    else:
+        parser = argparse.ArgumentParser(description='Megatron-LM Arguments',
+                                         allow_abbrev=False)
 
     # Standard arguments.
     parser = _add_network_size_args(parser)
@@ -47,10 +57,13 @@ def parse_args(extra_args_provider=None, defaults={},
         parser = extra_args_provider(parser)
 
     # Parse.
-    if ignore_unknown_args:
-        args, _ = parser.parse_known_args()
+    if _quinine_available:
+        args = parser.parse_quinfig()
     else:
-        args = parser.parse_args()
+        if ignore_unknown_args:
+            args, _ = parser.parse_known_args()
+        else:
+            args = parser.parse_args()
 
     # Distributed args.
     args.rank = int(os.getenv('RANK', '0'))
@@ -91,7 +104,7 @@ def parse_args(extra_args_provider=None, defaults={},
     # Check required arguments.
     required_args = ['num_layers', 'hidden_size', 'num_attention_heads',
                      'max_position_embeddings']
-    for req_arg in required_args: 
+    for req_arg in required_args:
         _check_arg_is_not_none(args, req_arg)
 
     # Checks.

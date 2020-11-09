@@ -1,0 +1,9 @@
+# Checkpoint path
+save: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_baby
+load: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_baby
+
+# Tensorboard path
+tensorboard_dir: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_baby/tensorboard
+
+vocab_file: /u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-vocab.json
+merge_file: /u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-merges.txt

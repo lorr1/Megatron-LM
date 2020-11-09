@@ -1,0 +1,9 @@
+# Output arguments
+log_interval: 10
+save_interval: 500
+eval_interval: 100
+eval_iters: 10
+train_iters: 10000
+no_save_optim: True
+no_save_rng: True
+checkpoint_activations: True

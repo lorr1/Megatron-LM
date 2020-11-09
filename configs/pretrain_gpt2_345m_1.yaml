@@ -1,0 +1,13 @@
+inherit:
+    # parameters from later configs in this list will override parameters from those earlier
+    # use either relative or absolute paths
+    - base_gpt2_345m.yaml
+    - base_file_paths.yaml
+    - base_output.yaml
+    - base_wandb_pretrain.yaml
+
+# Data path
+data_path: /u/scr/nlp/ooa/megatron-preprocessed-data/baby_dataset/test_abc_text_document
+
+# Data split
+split: "33, 33, 33"
