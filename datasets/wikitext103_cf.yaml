@@ -1,0 +1,14 @@
+wandb-project: gpt-rep-test
+dataset:
+  split : all
+  dataset-name : wikitext
+  datafile : wikitext-103-raw-v1
+megatron_preprocess:
+  --input : /u/scr/nlp/ooa/wikitext103-full/wikitext_corpus.json
+  --output-prefix : /u/scr/nlp/ooa/wikitext103-full/wikitext103
+  --vocab : /u/scr/nlp/ooa/wikitext103-full/gpt2-vocab.json
+  --merge-file : /u/scr/nlp/ooa/wikitext103-full/gpt2-merges.txt
+  --workers: 16
+  --dataset-impl: mmap
+  --json-keys : text 
+  --tokenizer-type : GPT2BPETokenizer
