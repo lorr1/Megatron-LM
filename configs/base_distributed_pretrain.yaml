@@ -1,0 +1,7 @@
+# Distributed computing
+
+distributed-backend: nccl
+nnodes: 1
+node_rank: 0
+master_addr: localhost
+master_port: 6002

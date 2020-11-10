@@ -2,9 +2,11 @@ CHECKPOINT_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_w
 TENSORBOARD_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103/tensorboard
 VOCAB_FILE=/u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-vocab.json
 MERGE_FILE=/u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-merges.txt
-DATA_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/wikitext103/wikitext103_text_document
+DATA_PATH=/u/scr/nlp/ooa/megatron-preprocessed-data/wikitext103-full/wikitext103_text_document
 
-GPUS_PER_NODE=5
+# For model parallel, set $MP_SIZE (WORD_SIZE must be divisible by it)
+# --model-parallel-size $MP_SIZE --DDP-impl torch
+GPUS_PER_NODE=4
 # Change for multinode config
 MASTER_ADDR=localhost
 MASTER_PORT=6002
@@ -17,7 +19,7 @@ GPT2_ARGS="--num-layers 4 \
            --num-attention-heads 16 \
            --seq-length 512 \
            --max-position-embeddings 512 \
-           --batch-size 56 \
+           --batch-size 32 \
            --lr 0.00015 \
            --distributed-backend nccl \
            --lr-decay-iters 320000 \
@@ -52,4 +54,4 @@ python -m torch.distributed.launch $DISTRIBUTED_ARGS \
        --split "100, 10, 10"
 
 
-       # nlprun -a kgoel-py38-megatronlm -m jagupard10 -g 5 -p high -q jag -w /juice/scr/lorr1/Megatron-LM -s zsh `bash examples/run_gpt2_nlp_distributed.sh`
+       # nlprun -a kgoel-py38-megatronlm -m jagupard10 -g 4 -p high -q jag -w /juice/scr/lorr1/Megatron-LM -s zsh 'bash examples/quin_distributed.sh'

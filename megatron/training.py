@@ -380,11 +380,15 @@ def training_log(loss_dict, total_loss_dict, learning_rate, iteration,
         log_string += ' learning rate: {:.5E} |'.format(learning_rate)
         num_iterations = max(
             1, args.log_interval - total_loss_dict[skipped_iters_key])
+        wandb_loss_dict = {}
         for key in total_loss_dict:
             if key not in [skipped_iters_key, got_nan_key]:
                 avg = total_loss_dict[key].item() / float(num_iterations)
                 log_string += ' {}: {:.6E} |'.format(key, avg)
+                wandb_loss_dict[key] = avg
                 total_loss_dict[key] = 0.0
+        if torch.distributed.get_rank() == 0:
+            wandb.log(wandb_loss_dict)
         if args.fp16:
             log_string += ' loss scale: {:.1f} |'.format(loss_scale)
         log_string += ' number of skipped iterations: {:3d} |'.format(
