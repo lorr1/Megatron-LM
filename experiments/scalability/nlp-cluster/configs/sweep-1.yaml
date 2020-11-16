@@ -3,22 +3,29 @@ inherit:
 
 # Model arguments for scalability analysis
 num_layers:
-    ~disjoint:
+    ~product:
+        - 1
         - 4
         - 8
-        - 12
+        - 16
 hidden_size:
-    ~disjoint:
-        - 128
+    ~product:
         - 512
         - 1024
 num_attention_heads:
-    ~disjoint:
+    ~product:
         - 16
         - 32
-        - 128
-seq_length: 512
-max_position_embeddings: 512
+seq_length:
+    ~product:
+        - 512
+        - 1024
+max_position_embeddings:
+    ~disjoint:
+        - 1024
 batch_size:
     ~product:
-        - 56
+        - 1
+        - 8
+        - 16
+        - 32
