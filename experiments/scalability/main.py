@@ -29,6 +29,7 @@ quinfigs = list(quinsweep)
 for i, quinfig in enumerate(quinfigs):
     quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/' \
                    f'{os.path.basename(args.sweep).replace(".yaml", "")}_{now}_{i}'
+    quinfig.master_port = args.port if args.port else quinfig.master_port
     os.makedirs(os.path.join(quinfig.save, 'wandb'))
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
@@ -43,5 +44,5 @@ for i in range(len(quinfigs)):
                     '--nnodes', f'{quinfigs[i].nnodes}',
                     '--node_rank', f'{quinfigs[i].node_rank}',
                     '--master_addr', f'{quinfigs[i].master_addr}',
-                    '--master_port', f'{quinfigs[i].master_port if not args.port else args.port}',
+                    '--master_port', f'{quinfigs[i].master_port}',
                     'pretrain_gpt2.py', '--config', f'{config_dir}/{i}.yaml'])
