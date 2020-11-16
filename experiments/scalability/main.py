@@ -29,7 +29,7 @@ quinfigs = list(quinsweep)
 for i, quinfig in enumerate(quinfigs):
     quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/' \
                    f'{os.path.basename(args.sweep).replace(".yaml", "")}_{now}_{i}'
-    quinfig.master_port = args.port + i if args.port else quinfig.master_port
+    quinfig.master_port = int(args.port) + i if args.port else quinfig.master_port
     os.makedirs(os.path.join(quinfig.save, 'wandb'))
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
