@@ -35,5 +35,4 @@ with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
 
 # Run
 for i in range(1):
-    subprocess.run(['python', '-m', 'pretrain_gpt2', '--config', f'{config_dir}/{i}.yaml'])
-
+    subprocess.run(['MKL_THREADING_LAYER=TBB', 'python', '-m', 'pretrain_gpt2', '--config', f'{config_dir}/{i}.yaml'])
