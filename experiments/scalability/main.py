@@ -12,6 +12,7 @@ from quinine.common.utils import difference
 parser = ArgumentParser(description='Sweep for scalability analysis.')
 parser.add_argument('--sweep', help='Path to sweep config file.')
 parser.add_argument('--port', help='Overwrite master_port.', default=None)
+parser.add_argument('--start_index', help='Starts from the start_index config in the sweep.', default=0)
 args = parser.parse_args()
 
 quinsweep = QuinSweep(sweep_config_path=args.sweep)
@@ -38,7 +39,7 @@ with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
     pd.DataFrame(difference(*quinfigs)).to_string(outfile)
 
 # Run
-for i in range(44, len(quinfigs)):
+for i in range(args.start_index, len(quinfigs)):
     subprocess.run(['python', '-m', 'torch.distributed.launch',
                     '--nproc_per_node', f'{quinfigs[i].nproc_per_node}',
                     '--nnodes', f'{quinfigs[i].nnodes}',
