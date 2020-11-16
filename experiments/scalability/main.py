@@ -37,7 +37,7 @@ with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
     pd.DataFrame(difference(*quinfigs)).to_string(outfile)
 
 # Run
-for i in range(len(quinfigs)):
+for i in range(11, len(quinfigs)):
     subprocess.run(['python', '-m', 'torch.distributed.launch',
                     '--nproc_per_node', f'{quinfigs[i].nproc_per_node}',
                     '--nnodes', f'{quinfigs[i].nnodes}',
