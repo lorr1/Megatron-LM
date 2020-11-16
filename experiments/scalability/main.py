@@ -29,7 +29,7 @@ quinfigs = list(quinsweep)
 for i, quinfig in enumerate(quinfigs):
     quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/' \
                    f'{os.path.basename(args.sweep).replace(".yaml", "")}_{now}_{i}'
-    quinfig.master_port = args.port if args.port else quinfig.master_port
+    quinfig.master_port = args.port + i if args.port else quinfig.master_port
     os.makedirs(os.path.join(quinfig.save, 'wandb'))
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
@@ -38,7 +38,7 @@ with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
     pd.DataFrame(difference(*quinfigs)).to_string(outfile)
 
 # Run
-for i in range(11, len(quinfigs)):
+for i in range(17, len(quinfigs)):
     subprocess.run(['python', '-m', 'torch.distributed.launch',
                     '--nproc_per_node', f'{quinfigs[i].nproc_per_node}',
                     '--nnodes', f'{quinfigs[i].nnodes}',
