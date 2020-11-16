@@ -37,7 +37,10 @@ with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
 
 # Run
 for i in range(2):
-    subprocess.run(['python', '-m', 'torch.distributed.launch', '--nproc_per_node', f'{quinfigs[i].nproc_per_node}',
-                    '--nnodes', f'{quinfigs[i].nnodes}', '--node_rank', f'{quinfigs[i].node_rank}',
-                    '--master_addr', f'{quinfigs[i].master_addr}', '--master_port', f'{quinfigs[i].master_port}',
+    subprocess.run(['python', '-m', 'torch.distributed.launch',
+                    '--nproc_per_node', f'{quinfigs[i].nproc_per_node}',
+                    '--nnodes', f'{quinfigs[i].nnodes}',
+                    '--node_rank', f'{quinfigs[i].node_rank}',
+                    '--master_addr', f'{quinfigs[i].master_addr}',
+                    '--master_port', f'{quinfigs[i].master_port}',
                     'pretrain_gpt2.py', '--config', f'{config_dir}/{i}.yaml'])

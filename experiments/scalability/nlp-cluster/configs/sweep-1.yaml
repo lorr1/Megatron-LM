@@ -1,33 +1,37 @@
 inherit:
     - fixed_args_wikitext103.yaml
 
+nproc_per_node:
+    ~product:
+        - 1
+        - 2
+        - 4
 # Model arguments for scalability analysis
 num_layers:
     ~product:
-        - 1
-        - 4
-        - 8
         - 16
+        - 8
+        - 4
+        - 1
 hidden_size:
     ~product:
-        - 512
         - 1024
+        - 512
 num_attention_heads:
     ~product:
-        - 16
         - 32
+        - 16
 seq_length:
     ~product:
-        - 512
         - 1024
+        - 512
 max_position_embeddings:
     ~disjoint:
         - 1024
 batch_size:
     ~product:
-        - 1
-        - 8
-        - 16
         - 32
+        - 16
+        - 8
+        - 1
         
-nproc_per_node: 4
