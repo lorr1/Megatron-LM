@@ -11,6 +11,7 @@ from quinine.common.utils import difference
 # Create an argument parser to input the sweep
 parser = ArgumentParser(description='Sweep for scalability analysis.')
 parser.add_argument('--sweep', help='Path to sweep config file.')
+parser.add_argument('--port', help='Overwrite master_port.', default=None)
 args = parser.parse_args()
 
 quinsweep = QuinSweep(sweep_config_path=args.sweep)
@@ -42,5 +43,5 @@ for i in range(len(quinfigs)):
                     '--nnodes', f'{quinfigs[i].nnodes}',
                     '--node_rank', f'{quinfigs[i].node_rank}',
                     '--master_addr', f'{quinfigs[i].master_addr}',
-                    '--master_port', f'{quinfigs[i].master_port}',
+                    '--master_port', f'{quinfigs[i].master_port if not args.port else args.port}',
                     'pretrain_gpt2.py', '--config', f'{config_dir}/{i}.yaml'])
