@@ -16,11 +16,11 @@ fp16: True
 group: scalability-analysis
 
 # Output arguments
-log_interval: 50
+log_interval: 20
 save_interval: 3000
 eval_interval: 1000
 eval_iters: 30
-train_iters: 250
+train_iters: 100
 no_save_optim: True
 no_save_rng: True
 checkpoint_activations: True
