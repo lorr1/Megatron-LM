@@ -114,13 +114,18 @@ df = pd.concat([
                  columns=['total_batch_size']),
     # Memory usage
     pd.DataFrame([info.memory for info in infos]),
-    # Global memory usage
-    pd.DataFrame([run.config['nproc_per_node'] * info.memory['memory_max_reserved'] for run, info in zip(runs, infos)],
-                 columns=['global_memory_max_reserved']),
     # Time taken per iteration
     pd.DataFrame([np.mean(info.time_per_iter[1:]) for info in infos], columns=['time_per_iter']),
     # Whether run was successful
     pd.DataFrame([info.failed for info in infos], columns=['failed']),
+], axis=1)
+
+# Add more columns
+df = pd.concat([
+    df,
+    # Global memory usage
+    pd.DataFrame(df[["nproc_per_node", "memory_max_reserved"]].product(axis=1),
+                 columns=['global_memory_max_reserved']),
 ], axis=1)
 
 # Save the dataframe to file
