@@ -27,7 +27,7 @@ checkpoint_activations: True
 
 # Checkpoint path
 save: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103
-load: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103
+load: null
 
 # Tensorboard path
 tensorboard_dir: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103/tensorboard

@@ -26,6 +26,7 @@ quinfigs = list(quinsweep)
 
 # Save each sweep config
 for i, quinfig in enumerate(quinfigs):
+    quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/{now}_{i}'
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
 # Save a summary of the sweep
@@ -34,5 +35,5 @@ with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
 
 
 # Run
-for i in range(1):
+for i in range(2):
     subprocess.run(['python', '-m', 'pretrain_gpt2', '--config', f'{config_dir}/{i}.yaml'])
