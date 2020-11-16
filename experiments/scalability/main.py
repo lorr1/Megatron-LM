@@ -28,6 +28,7 @@ quinfigs = list(quinsweep)
 for i, quinfig in enumerate(quinfigs):
     quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/' \
                    f'{os.path.basename(args.sweep).replace(".yaml", "")}_{now}_{i}'
+    os.makedirs(os.path.join(quinfig.save, 'wandb'))
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
 # Save a summary of the sweep
