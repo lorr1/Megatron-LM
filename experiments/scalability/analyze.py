@@ -1,6 +1,7 @@
 import os
 
 import wandb
+import cytoolz as tz
 import matplotlib.pyplot as plt
 import numpy as np
 import json
@@ -8,6 +9,7 @@ from collections import namedtuple
 import pandas as pd
 from quinine.common.utils import difference
 from types import SimpleNamespace
+from tqdm.auto import tqdm
 
 
 def fetch_all_wandb_run_ids(entity, project, filters=None, wandb_api=None):
@@ -61,7 +63,8 @@ def load_info_from_run(run):
     return SimpleNamespace(
         memory=memory,
         time_per_iter=time_per_iter,
-        failed=False if run.state == 'finished' else True
+        failed=False if run.state == 'finished' or run.id in {'151q6uwk', '3r1pr73v', '1pujl0iq', 'do0609f3'} else True
+        # (karan) 151q6uwk crashed due to user error, finished successfully
     )
 
 
@@ -86,21 +89,27 @@ runs = [
         project=project,
         wandb_api=api
     )
-    for run_id in run_ids
+    for run_id in tqdm(run_ids, "Fetching runs")
 ]
 
 infos = [
     load_info_from_run(run)
-    for run in runs
+    for run in tqdm(runs, "Loading info")
 ]
 
+# Find the differences between all the run configs
+config_diffs = difference(*[run.config for run in runs])
+# Clean up the parameter names (tuple -> str)
+config_diffs = list(map(lambda d: tz.keymap(lambda k: k[0] if len(k) == 1 else k, d), config_diffs))
+
+# Create a single dataframe containing run information
 df = pd.concat([
-    # Parameters that are different across the runs
-    pd.DataFrame(difference(*[run.config for run in runs])),
     # Run information
     pd.DataFrame([run.path for run in runs], columns=['entity', 'project', 'run_id']),
-    # Number of GPUs
-    pd.DataFrame([run.config['nproc_per_node'] for run in runs], columns=['nproc_per_node']),
+    # Parameters that are different across runs
+    pd.DataFrame(config_diffs),
+    # # Number of GPUs
+    # pd.DataFrame([run.config['nproc_per_node'] for run in runs], columns=['nproc_per_node']),
     # Memory usage
     pd.DataFrame([info.memory for info in infos]),
     # Time taken per iteration
@@ -109,6 +118,26 @@ df = pd.concat([
     pd.DataFrame([info.failed for info in infos], columns=['failed']),
 ], axis=1)
 
-with open('report.txt', 'w') as f:
+# Save the dataframe to file
+with open('experiments/scalability/report.txt', 'w') as f:
     print(df.to_string(f))
-# Fix l-1 parameters, vary lth
+df.to_pickle('experiments/scalability/analysis.p')
+
+# Analysis columns
+knobs = [
+    'batch_size',
+    'num_layers',
+    'hidden_size',
+    'nproc_per_node',
+    'num_attention_heads'
+]
+observations = [
+    'param_count',
+    'param_mb',
+    'memory_allocated',
+    'memory_max_allocated',
+    'memory_reserved',
+    'memory_max_reserved',
+    'time_per_iter',
+    'failed'
+]
