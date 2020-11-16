@@ -3,8 +3,8 @@ inherit:
 
 nproc_per_node:
     ~product:
-        - 1
-        - 2
+#        - 1
+#        - 2
         - 4
 # Model arguments for scalability analysis
 num_layers:
