@@ -12,7 +12,7 @@ from quinine.common.utils import difference
 parser = ArgumentParser(description='Sweep for scalability analysis.')
 parser.add_argument('--sweep', help='Path to sweep config file.')
 parser.add_argument('--port', help='Overwrite master_port.', default=None)
-parser.add_argument('--start_index', help='Starts from the start_index config in the sweep.', default=0)
+parser.add_argument('--start_index', help='Starts from the start_index config in the sweep.', type=int, default=0)
 args = parser.parse_args()
 
 quinsweep = QuinSweep(sweep_config_path=args.sweep)
