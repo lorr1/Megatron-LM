@@ -1,0 +1,43 @@
+# Distributed computing
+distributed-backend: nccl
+nnodes: 1
+node_rank: 0
+master_addr: localhost
+master_port: 6002
+
+# Training arguments
+lr: 0.00015
+lr_decay_iters: 320000
+lr_decay_style: cosine
+warmup: .01
+fp16: True
+
+# Weights and Biases arguments
+group: scalability-analysis
+
+# Output arguments
+log_interval: 100
+save_interval: 3000
+eval_interval: 1000
+eval_iters: 30
+train_iters: 100
+no_save_optim: True
+no_save_rng: True
+checkpoint_activations: True
+
+# Checkpoint path
+save: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103
+load: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103
+
+# Tensorboard path
+tensorboard_dir: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_wiki103/tensorboard
+
+# Vocab path
+vocab_file: /u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-vocab.json
+merge_file: /u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-merges.txt
+
+# Data path
+data_path: /u/scr/nlp/ooa/megatron-preprocessed-data/wikitext103-full/wikitext103_text_document
+
+# Data split
+split: "0.9954271262325057,0.0024701379039286384,0.0021027358635656796"

@@ -1,0 +1,24 @@
+inherit:
+    - fixed_args_wikitext103.yaml
+
+# Model arguments for scalability analysis
+num_layers:
+    ~disjoint:
+        - 4
+        - 8
+        - 12
+hidden_size:
+    ~disjoint:
+        - 128
+        - 512
+        - 1024
+num_attention_heads:
+    ~disjoint:
+        - 16
+        - 32
+        - 128
+seq_length: 512
+max_position_embeddings: 512
+batch_size:
+    ~product:
+        - 56
