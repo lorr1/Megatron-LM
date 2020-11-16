@@ -26,13 +26,13 @@ quinfigs = list(quinsweep)
 
 # Save each sweep config
 for i, quinfig in enumerate(quinfigs):
-    quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/{os.path.basename(args.sweep)}_{now}_{i}'
+    quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/' \
+                   f'{os.path.basename(args.sweep).replace(".yaml", "")}_{now}_{i}'
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
 # Save a summary of the sweep
 with open(os.path.join(config_dir, 'summary.txt'), 'w') as outfile:
     pd.DataFrame(difference(*quinfigs)).to_string(outfile)
-
 
 # Run
 for i in range(2):

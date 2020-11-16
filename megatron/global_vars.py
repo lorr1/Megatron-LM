@@ -20,6 +20,7 @@ import sys
 import time
 
 import torch
+import wandb
 
 from megatron.tokenizer import build_tokenizer
 from .arguments import parse_args
@@ -222,12 +223,15 @@ class Timers:
         """Log a group of timers."""
         assert normalizer > 0.0
         string = 'time (ms)'
+        wandb_timing_info = {}
         for name in names:
             elapsed_time = self.timers[name].elapsed(
                 reset=reset) * 1000.0 / normalizer
+            wandb_timing_info[f'info/{name}'] = elapsed_time
             string += ' | {}: {:.2f}'.format(name, elapsed_time)
         if torch.distributed.is_initialized():
             if torch.distributed.get_rank() == 0:
                 print(string, flush=True)
+                wandb.log(wandb_timing_info, commit=False)
         else:
             print(string, flush=True)

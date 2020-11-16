@@ -128,18 +128,25 @@ def get_model(model_provider_func):
         for p in [p for p in model.named_parameters() if p[1].requires_grad is requires_grad]:
             total_cnt += p[1].numel()*4/1024**2
             print("{:s} {:d} {:.2f} MB".format(p[0], p[1].numel(), p[1].numel()*4/1024**2))
+            wandb.log({f'params/{p[0]}_count': p[1].numel(),
+                       f'params/{p[0]}_mb': p[1].numel()*4/1024**2},
+                      commit=False)
         return total_cnt
     # Print number of parameters.
     if mpu.get_data_parallel_rank() == 0:
         print("*** NUMBER PARAMETERS WITH GRAD")
         t = count_parameters(model, requires_grad=True)
+        wandb.log({'params/total_mb_grad': t}, commit=False)
         print("TOTAL", t)
         print("*** NUMBER PARAMETERS WITHOUT GRAD")
         t = count_parameters(model, requires_grad=False)
+        wandb.log({'params/total_mb_nograd': t}, commit=False)
         print("TOTAL", t)
+        total_count = sum([p.nelement() for p in model.parameters()])
         print(' > number of parameters on model parallel rank {}: {}'.format(
             mpu.get_model_parallel_rank(),
-            sum([p.nelement() for p in model.parameters()])), flush=True)
+            total_count), flush=True)
+        wandb.log({'params/total_count': total_count})
 
     # GPU allocation.
     model.cuda(torch.cuda.current_device())
@@ -388,7 +395,10 @@ def training_log(loss_dict, total_loss_dict, learning_rate, iteration,
                 wandb_loss_dict[key] = avg
                 total_loss_dict[key] = 0.0
         if torch.distributed.get_rank() == 0:
-            wandb.log(wandb_loss_dict)
+            wandb.log(wandb_loss_dict, commit=False)
+            wandb.log({'info/time_per_iter': elapsed_time * 1000.0 / args.log_interval,
+                       'info/skipped_iters': total_loss_dict[skipped_iters_key]},
+                      commit=False)
         if args.fp16:
             log_string += ' loss scale: {:.1f} |'.format(loss_scale)
         log_string += ' number of skipped iterations: {:3d} |'.format(
@@ -402,6 +412,9 @@ def training_log(loss_dict, total_loss_dict, learning_rate, iteration,
             report_memory('after {} iterations'.format(iteration))
             report_memory_flag = False
         timers.log(timers_to_log, normalizer=args.log_interval)
+
+        if torch.distributed.get_rank() == 0:
+            wandb.log({}, commit=True)
 
     return report_memory_flag
 

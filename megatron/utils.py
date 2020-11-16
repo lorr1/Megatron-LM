@@ -18,6 +18,7 @@
 import sys
 
 import torch
+import wandb
 
 from megatron import get_args
 from megatron import print_rank_0
@@ -49,6 +50,12 @@ def report_memory(name):
     string += ' | reserved: {}'.format(torch.cuda.memory_reserved() / mega_bytes)
     string += ' | max reserved: {}'.format(
         torch.cuda.max_memory_reserved() / mega_bytes)
+    if torch.distributed.get_rank() == 0:
+        wandb.log({'info/memory_allocated': torch.cuda.memory_allocated() / mega_bytes,
+                   'info/memory_max_allocated': torch.cuda.max_memory_allocated() / mega_bytes,
+                   'info/memory_reserved': torch.cuda.memory_reserved() / mega_bytes,
+                   'info/memory_max_reserved': torch.cuda.max_memory_reserved() / mega_bytes},
+                  commit=False)
     print_rank_0(string)
 
 
@@ -132,7 +139,7 @@ def get_ltor_masks_and_position_ids(data,
         att_mask_batch = 1
     attention_mask = torch.tril(torch.ones(
         (att_mask_batch, seq_length, seq_length), device=data.device)).view(
-            att_mask_batch, 1, seq_length, seq_length)
+        att_mask_batch, 1, seq_length, seq_length)
 
     # Loss mask.
     loss_mask = torch.ones(data.size(), dtype=torch.float, device=data.device)
@@ -173,5 +180,3 @@ def get_ltor_masks_and_position_ids(data,
     attention_mask = (attention_mask < 0.5)
 
     return attention_mask, loss_mask, position_ids
-
-
