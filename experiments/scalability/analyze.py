@@ -63,7 +63,8 @@ def load_info_from_run(run):
     return SimpleNamespace(
         memory=memory,
         time_per_iter=time_per_iter,
-        failed=False if run.state == 'finished' or run.id in {'151q6uwk', '3r1pr73v', '1pujl0iq', 'do0609f3'} else True
+        failed=False if run.state == 'finished' or run.id in {'151q6uwk', '3r1pr73v', '1pujl0iq', 'do0609f3',
+                                                              '2dijkopv', '2mthlxld'} else True
         # (karan) 151q6uwk crashed due to user error, finished successfully
     )
 
@@ -108,8 +109,9 @@ df = pd.concat([
     pd.DataFrame([run.path for run in runs], columns=['entity', 'project', 'run_id']),
     # Parameters that are different across runs
     pd.DataFrame(config_diffs),
-    # # Number of GPUs
-    # pd.DataFrame([run.config['nproc_per_node'] for run in runs], columns=['nproc_per_node']),
+    # Global batch size
+    pd.DataFrame([run.config['nproc_per_node'] * run.config['batch_size'] for run in runs],
+                 columns=['total_batch_size']),
     # Memory usage
     pd.DataFrame([info.memory for info in infos]),
     # Time taken per iteration
@@ -129,7 +131,8 @@ knobs = [
     'num_layers',
     'hidden_size',
     'nproc_per_node',
-    'num_attention_heads'
+    'num_attention_heads',
+    'total_batch_size',
 ]
 observations = [
     'param_count',
