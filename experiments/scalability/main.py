@@ -26,7 +26,7 @@ quinfigs = list(quinsweep)
 
 # Save each sweep config
 for i, quinfig in enumerate(quinfigs):
-    quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/{now}_{i}'
+    quinfig.save = f'/u/scr/nlp/ooa/megatron-preprocessed-data/scalability-analysis/{os.path.basename(args.sweep)}_{now}_{i}'
     yaml.dump(quinfig, open(os.path.join(config_dir, f'{i}.yaml'), 'w'))
 
 # Save a summary of the sweep
