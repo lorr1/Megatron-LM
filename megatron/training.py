@@ -134,6 +134,7 @@ def get_model(model_provider_func):
         return total_cnt
     # Print number of parameters.
     if mpu.get_data_parallel_rank() == 0:
+        print(f"model parallel rank: {mpu.get_model_parallel_rank()}")
         print("*** NUMBER PARAMETERS WITH GRAD")
         t = count_parameters(model, requires_grad=True)
         wandb.log({'params/total_mb_grad': t}, commit=False)
