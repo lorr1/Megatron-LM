@@ -64,7 +64,7 @@ def load_info_from_run(run):
         memory=memory,
         time_per_iter=time_per_iter,
         failed=False if run.state == 'finished' or run.id in {'151q6uwk', '3r1pr73v', '1pujl0iq', 'do0609f3',
-                                                              '2dijkopv', '2mthlxld'} else True
+                                                              '2dijkopv', '2mthlxld', 'q5hnq0h4'} else True
         # (karan) 151q6uwk crashed due to user error, finished successfully
     )
 
@@ -120,9 +120,17 @@ df = pd.concat([
     pd.DataFrame([info.failed for info in infos], columns=['failed']),
 ], axis=1)
 
+# Add more columns
+df = pd.concat([
+    df,
+    # Global memory usage
+    pd.DataFrame(df[["nproc_per_node", "memory_max_reserved"]].product(axis=1),
+                 columns=['global_memory_max_reserved']),
+], axis=1)
+
 # Save the dataframe to file
 with open('experiments/scalability/report.txt', 'w') as f:
-    print(df.to_string(f))
+    df.to_string(f)
 df.to_pickle('experiments/scalability/analysis.p')
 
 # Analysis columns
