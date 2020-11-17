@@ -6,14 +6,9 @@ nproc_per_node: 4
 num_layers:
     ~product:
         - 24
-        - 16
-        - 8
-        - 4
-        - 1
 hidden_size:
     ~product:
         - 1024
-        - 512
 num_attention_heads: 16
 seq_length: 1024
 max_position_embeddings:
