@@ -18,7 +18,7 @@ def fetch_all_wandb_run_ids(entity, project, filters=None, wandb_api=None):
     """
     if wandb_api is None:
         wandb_api = wandb.Api()
-    wandb_path = f'{entity}/{project}/*'
+    wandb_path = f'{entity}/{project}'
     runs = wandb_api.runs(wandb_path, filters={} if not filters else filters)
     return [run.id for run in runs]
 
