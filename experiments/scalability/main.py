@@ -47,3 +47,4 @@ for i in range(args.start_index, len(quinfigs)):
                     '--master_addr', f'{quinfigs[i].master_addr}',
                     '--master_port', f'{quinfigs[i].master_port}',
                     'pretrain_gpt2.py', '--config', f'{config_dir}/{i}.yaml'])
+    subprocess.run(['sleep', '3'])
