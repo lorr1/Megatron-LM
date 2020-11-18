@@ -10,7 +10,7 @@ inherit:
 save: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_small
 load: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_small
 tensorboard_dir: /u/scr/nlp/ooa/megatron-preprocessed-data/testing_outputs/gpt2_small/tensorboard
-data_path: /u/scr/nlp/ooa/megatron-preprocessed-data/wikitext103-full/wikitext103_text_document
+data_path: /u/scr/nlp/ooa/megatron-preprocessed-data/wikitext103-full-wordlevel/wikitext103_text_document
 
 # Model
 num_layers: 12

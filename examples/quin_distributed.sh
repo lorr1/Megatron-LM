@@ -1,5 +1,5 @@
 
-GPUS_PER_NODE=4
+GPUS_PER_NODE=5
 # Change for multinode config
 MASTER_ADDR=localhost
 MASTER_PORT=6002
