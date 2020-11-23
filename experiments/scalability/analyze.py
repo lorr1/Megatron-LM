@@ -109,8 +109,12 @@ df = pd.concat([
     pd.DataFrame([run.path for run in runs], columns=['entity', 'project', 'run_id']),
     # Parameters that are different across runs
     pd.DataFrame(config_diffs),
+    # Data parallel size
+    pd.DataFrame([int(run.config['nproc_per_node'] / run.config['model_parallel_size']) for run in runs],
+                 columns=['data_parallel_size']),
     # Global batch size
-    pd.DataFrame([run.config['nproc_per_node'] * run.config['batch_size'] for run in runs],
+    pd.DataFrame([int(run.config['nproc_per_node'] * run.config['batch_size'] / run.config['model_parallel_size'])
+                  for run in runs],
                  columns=['total_batch_size']),
     # Memory usage
     pd.DataFrame([info.memory for info in infos]),
@@ -124,7 +128,7 @@ df = pd.concat([
 df = pd.concat([
     df,
     # Global memory usage
-    pd.DataFrame(df[["nproc_per_node", "memory_max_reserved"]].product(axis=1),
+    pd.DataFrame(df[["nproc_per_node", "memory_max_reserved"]].product(axis=1, skipna=False),
                  columns=['global_memory_max_reserved']),
 ], axis=1)
 
