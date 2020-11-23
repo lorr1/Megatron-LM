@@ -47,8 +47,10 @@ def wand_init_0(args):
         if torch.distributed.get_rank() == 0:
             print(f"Saving wandb to {os.path.join(args.save)}")
             wandb.init(config=args, name=args.name, project=args.project, entity=args.entity, group=args.group, job_type=args.job_type,
-                       dir=args.save, save_code=True, sync_tensorboard=True)
+                       dir=args.save, save_code=True)#, sync_tensorboard=True)
+            wandb.tensorboard.patch(pytorch=True)
     else:
         print(f"Saving wandb to {os.path.join(args.save)}")
         wandb.init(config=args, name=args.name, project=args.project, entity=args.entity, group=args.group, job_type=args.job_type,
-                   dir=args.save, save_code=True, sync_tensorboard=True)
+                   dir=args.save, save_code=True)#, sync_tensorboard=True)
+        wandb.tensorboard.patch(pytorch=True)
