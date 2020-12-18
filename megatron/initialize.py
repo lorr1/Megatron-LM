@@ -107,7 +107,7 @@ def _initialize_distributed():
             device = args.rank % device_count
             if args.local_rank is not None:
                 assert args.local_rank == device, \
-                    'expected local-rank to be the same as rank % device-count.'
+                    f'expected local-rank {args.local_rank} to be the same as rank % device-count ({device}).'
             else:
                 args.local_rank = device
             torch.cuda.set_device(device)

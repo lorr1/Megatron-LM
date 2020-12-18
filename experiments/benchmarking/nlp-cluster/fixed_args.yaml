@@ -1,0 +1,51 @@
+# Distributed computing
+distributed-backend: nccl
+nnodes: 1
+node_rank: 0
+master_addr: localhost
+master_port: 6002
+
+# Training arguments
+lr: 0.00015
+lr_decay_iters: 320000
+lr_decay_style: cosine
+warmup: .01
+fp16: True
+batch_size: 1
+
+# Weights and Biases arguments
+group: megatron-benchmarking
+
+# Output arguments
+log_interval: 20
+save_interval: 3000
+eval_interval: 1000
+eval_iters: 30
+train_iters: 250
+no_save_optim: True
+no_save_rng: True
+checkpoint_activations: True
+
+# Model
+num_layers: 12
+hidden_size: 768
+num_attention_heads: 12
+seq_length: 1024
+max_position_embeddings: 1024
+
+# Checkpoint path
+save: /u/scr/nlp/ooa/megatron-preprocessed-data/benchmarking/wikitext
+load: null
+
+# Tensorboard path
+tensorboard_dir: /u/scr/nlp/ooa/megatron-preprocessed-data/benchmarking/wikitext/tensorboard
+
+# Vocab path
+vocab_file: /u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-vocab.json
+merge_file: /u/scr/nlp/ooa/megatron-preprocessed-data/hugging_face_gpt2/gpt2-merges.txt
+
+# Data path
+data_path: /u/scr/nlp/ooa/megatron-preprocessed-data/wikitext103-new/wikitext103_text_document
+
+# Data split
+split: "0.9954271262325057,0.0024701379039286384,0.0021027358635656796"

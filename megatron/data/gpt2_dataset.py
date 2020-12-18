@@ -185,7 +185,7 @@ def _build_index_mappings(name, data_prefix, documents, sizes,
             assert sizes.dtype == np.int32
             sample_idx = helpers.build_sample_idx(sizes, doc_idx, seq_length,
                                                   num_epochs, tokens_per_epoch)
-            # sample_idx = _build_sample_idx(sizes, doc_idx, seq_length,
+            # sample_idx = wan(sizes, doc_idx, seq_length,
             #                               num_epochs, tokens_per_epoch)
             np.save(sample_idx_filename, sample_idx, allow_pickle=True)
             print_rank_0(' > elasped time to build and save sample-idx mapping '
@@ -259,7 +259,7 @@ def _build_doc_idx(documents, num_epochs, np_rng):
     return doc_idx
 
 
-def _build_sample_idx(sizes, doc_idx, seq_length,
+def wan(sizes, doc_idx, seq_length,
                       num_epochs, tokens_per_epoch):
     """Sample index mapping is a 2D array with sizes
     [number-of-samples + 1, 2] where [..., 0] contains

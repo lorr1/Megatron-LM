@@ -93,7 +93,8 @@ def forward_step(data_iterator, model):
 def train_valid_test_datasets_provider(train_val_test_num_samples):
     """Build train, valid, and test datasets."""
     args = get_args()
-
+    # import os
+    # os.environ['NCCL_SOCKET_IFNAME'] = "enp1s0f0"
     print_rank_0('> building train, validation, and test datasets '
                  'for GPT2 ...')
     train_ds, valid_ds, test_ds = build_train_valid_test_datasets(

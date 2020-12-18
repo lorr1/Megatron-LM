@@ -1,0 +1,15 @@
+inherit:
+    - fixed_args.yaml
+
+nproc_per_node: 1
+# Model arguments for scalability analysis
+batch_size:
+    ~product:
+        - 1
+        - 2
+        - 4
+
+fp16:
+    ~product:
+        - True
+        - False

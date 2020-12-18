@@ -1,0 +1,20 @@
+inherit:
+    - fixed_args.yaml
+
+nproc_per_node:
+    ~product:
+        - 2
+        - 4
+# Model arguments for scalability analysis
+batch_size:
+    ~product:
+        - 1
+        - 2
+        - 4
+
+DDP-impl:
+    ~product:
+        - local
+        - torch
+
+fp16: True
